@@ -69,13 +69,14 @@ export function ChallengesProvider({
     const randomChallengeIndex = Math.floor(Math.random() * challenges.length)
     const challenge = challenges[randomChallengeIndex];
 
-    setActiveChallenge(challenge);
+    setActiveChallenge(challenge as Challenge);
 
     new Audio('/notification.mp3').play();
 
     if(Notification.permission === 'granted') {
       new Notification('Novo desafio', {
-        body: `Valendo ${challenge.amount} xp!`
+        body: `Valendo ${challenge.amount} xp!`,
+        silent: false,
       });
     }
   }
@@ -96,11 +97,11 @@ export function ChallengesProvider({
     if (finalExperience >= experienceToNextLevel) {
       finalExperience = finalExperience - experienceToNextLevel;
       levelUp();
-
-      setCurrentExperience(finalExperience);
-      setActiveChallenge(null);
-      setChallengesCompleted(challengesCompleted + 1);
     }
+
+    setChallengesCompleted(challengesCompleted + 1);
+    setCurrentExperience(finalExperience);
+    setActiveChallenge(null);
   }
 
   return (
